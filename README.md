@@ -71,7 +71,10 @@ Após finalizar tudo, imprimir na tela as seguintes informações:
 # To do
 
 <ul>
-    <li>Implementar classe que cria uma fila - usar o próprio conceito de fila/queue.</li>
-    <li>Criar funções que geram o número aleatório para indicar a chegada de clientes</li>
-    <li>Criar funções que geram o número aleatório para indicar a transacao efetuada.</li>
+    <li>Implementar classe que cria uma fila - usar o próprio conceito de fila/queue. - ✅</li>
+    <li>Criar funções que geram o número aleatório para indicar a chegada de clientes - ✅</li>
+    <li>Criar funções que geram o número aleatório para indicar a transacao efetuada. - ✅</li>
+    <li>Implementar chegada do cliente</li>
+    <li>Implementar lógica dos guiches</li>
+    <li>Implementar logica do expediente</li>
 </ul>
