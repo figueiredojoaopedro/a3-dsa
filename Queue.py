@@ -83,4 +83,36 @@ class Queue:
 
         return temp;
 
-    
+    def pop(self, key):
+        currentNode = self.firstNode;
+
+        # if the list is empty, we return none
+        if(self.isEmpty()):
+            return None;
+
+        # traversing linearly through the list while the data isn't equal to the key
+        while(currentNode.getData() != key):
+            currentNode = currentNode.getNextNode();
+            
+            if(currentNode == None):
+                return None;
+
+        # if it's the first node, we do just as if it was popBegin
+        if(currentNode == self.firstNode):
+            self.firstNode = self.firstNode.getNextNode();
+            self.firstNode.setPrevNode(None);
+            return currentNode;
+
+        # if it's the last node, we do just as if it was popEnd
+        if(currentNode == self.lastNode):
+            self.lastNode = self.lastNode.getPrevNode();
+            self.lastNode.setNextNode(None);
+            return currentNode;
+
+        # if it's in the middle, we point the previous node to the next node and the opposite
+        currentNode.getPrevNode().setNextNode(currentNode.getNextNode());
+        currentNode.getNextNode().setPrevNode(currentNode.getPrevNode());
+        return currentNode();
+
+        
+        
