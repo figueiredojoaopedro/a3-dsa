@@ -10,27 +10,27 @@ def main():
     simulationTime = 0;
     beginningTime = 10; # opens at 10 am
     equivalentToOneHour = int(realTimeElapsed / expedientTotalTime);
-    clock = 0;
 
-    guiches = Queue(None, None);
+    guiches = Queue();
     # criacao de 3 Guiches 
     guiches.push(Guiche());
     guiches.push(Guiche());
     guiches.push(Guiche());
 
-    filaDeClientes = Queue(None, None);
+    filaDeClientes = Queue();
+    maiorTempoDeTransacao = 0;
 
     # Expediente:
     print("{}:00 Horas".format(beginningTime))
     while simulationTime < realTimeElapsed:
-        time.sleep(3);
         # tell us the simulation time
-        if((equivalentToOneHour == 20 
-            or equivalentToOneHour == 40 
-            or equivalentToOneHour == 60 
-            or equivalentToOneHour == 80 
-            or equivalentToOneHour == 100 
-            or equivalentToOneHour == 120) and simulationTime % equivalentToOneHour == 0):
+        print("simulation time: {}".format(simulationTime));
+        if((simulationTime == 20 
+            or simulationTime == 40 
+            or simulationTime == 60 
+            or simulationTime == 80 
+            or simulationTime == 100 
+            or simulationTime == 120) and simulationTime % equivalentToOneHour == 0):
             beginningTime += 1; # add + 1 hour
             print("{}:00 Horas".format(beginningTime));
         
@@ -38,38 +38,42 @@ def main():
         if(chegouCliente() == 0):
             # Cliente entra na fila
             filaDeClientes.pushEnd(simulationTime);
-            print("Cliente chegou {}".format(filaDeClientes.length()));
-        
-        # mostra como esta a situacao da fila
-        if(filaDeClientes.length() > 0):
-            clientePos = filaDeClientes.getFirstNode();
-            pos = 0;
-            while clientePos != None:
-                pos += 1;
-                print("{} => {}".format(pos, clientePos.getData()));
-                clientePos = clientePos.getNextNode();
+            cliente = filaDeClientes.getFirstNode();
+
+            # mostra a situacao da fila:
+            while cliente != None:
+                print("cliente: {}".format(cliente.getData()));
+                cliente = cliente.getNextNode();
+            print("Comprimento da fila: {}".format(filaDeClientes.lgt));
 
         # checa se há guiche vazio
+        print("\n");
         guiche = guiches.getFirstNode();
         while guiche != None:
-            print("Guiche tempo: {}".format(guiche.getData().getTempoTransacao()));
-            if(guiche.getData().getTempoTransacao() == 0): # se for false...
+            if(guiche.getData().getTempoTransacao() == 0 and filaDeClientes.lgt > 0): # se for false...
                 # guiche livre
                 guiche.getData().setTempoTransacao(transacaoEscolhida()); # set ocupacao true
                 # remove primeira posicao fila
-                print("Cliente atendido: {}" .format(filaDeClientes.getFirstNode()));
+                print("Cliente Atendido: {}" .format(filaDeClientes.getFirstNode().getData()));
                 filaDeClientes.popBegin();
-
+            
+            print("Guiche Ocupação: {}".format(guiche.getData().getTempoTransacao()));
             guiche = guiche.getNextNode();
-        
+        print("\n");
+
         # decresce 1 segundo do tempo de ocupacao dos guiches:
         guiche = guiches.getFirstNode();
         while guiche != None:
-            guiche.getData().setTempoTransacao(guiche.getData().getTempoTransacao() - 1);
-            print("Tempo de transacao {}".format(guiche.getData().getTempoTransacao()));
+            if(guiche.getData().getTempoTransacao() > 0):
+                guiche.getData().setTempoTransacao(guiche.getData().getTempoTransacao() - 1);
             guiche = guiche.getNextNode();
         
+        time.sleep(2);
         simulationTime += 1;
+
+    # escrever relatorio:
+    # with open("Relatorio.md", "w", enconding="utf-8") as file:
+    #   file.write(relatorio_content);
 
 if __name__ == "__main__":
     main()
