@@ -1,10 +1,10 @@
 
 class Guiche:
     def __init__(self):
-        self.ocupacao = None;
+        self.ocupacao = 0;
 
-    def getOcupacao(self):
+    def getTempoTransacao(self):
         return self.ocupacao;
 
-    def setOcupacao(self, ocupacao):
+    def setTempoTransacao(self, ocupacao):
         self.ocupacao = ocupacao;

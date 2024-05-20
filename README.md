@@ -13,6 +13,8 @@ Na medida que um guiche fica livre, o primeiro da fila é atendido.
 Inicialmente todos os guiches estão livres.
 Quando um cliente inicia uma transação num deles, o tempo médio de ocupacao é determinado pelas suas atividades.
 
+120 segundos
+
 <table>
     <thead>
         <tr>
@@ -25,17 +27,17 @@ Quando um cliente inicia uma transação num deles, o tempo médio de ocupacao �
         <tr>
             <td>Saque</td>
             <td>0</td>
-            <td>60 segundos</td>
+            <td>60 segundos</td> - 1 / 60 horas
         </tr>
         <tr>
             <td>Depósito</td>
             <td>1</td>
-            <td>90 segundos</td>
+            <td>90 segundos</td> - 1 / 40 horas
         </tr>
         <tr>
             <td>Pagamento</td>
             <td>2</td>
-            <td>120 segundos</td>
+            <td>120 segundos</td> - 1 / 30 horas
         </tr>
     </tbody>
 </table>
@@ -55,7 +57,7 @@ Período de atendimento é 6 horas ou 21600 segundos e o expediente terminar ap�
 
 Chegada do cliente aleatória - funcao aleatória que sorteia de 0 a 29, caso valor seja 0, o cliente chegou, caso contrário, nada acontece.
 
-Um cliente será representado pelo horário e ao entrar na fila, logo o valor na fila será o tempo do cronometro no exato momento.
+Um cliente será representado pelo horário e o valor na fila será o tempo do cronometro no exato momento.
 
 A transacao será calculada por um número aleatório entre 0 e 2.
 
