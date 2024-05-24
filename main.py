@@ -26,7 +26,7 @@ def main():
     totalSaquesRealizados = 0 # 
     totalDepositosRealizados = 0 # 
     totalPagamentosRealizados = 0 # 
-    totalOperacoesRealizadas = 0
+    
 
     totalTempoEspera = 0  # Para calcular o tempo médio de espera
 
@@ -90,7 +90,7 @@ def main():
                     totalPagamentosRealizados += 1
                 
                 guiche.getData().setTempoTransacao(tempoTransacao)  # set ocupação true
-                totalOperacoesRealizadas += 1
+                
                 
                 # Remove primeira posição da fila
                 print("Cliente Atendido: {}".format(filaDeClientes.getFirstNode().getData()))
@@ -127,23 +127,21 @@ def main():
 
 
     # # Calcula o tempo extra de simulação até que todos os guichês estejam desocupados
-    # tempoExtra = simulationTime - realTimeElapsed
+    tempoExtra = simulationTime - realTimeElapsed
+    mediaEspera = totalClientesAtendidos / totalTempoEspera
+    
 
-    # # Calcula o tempo médio de espera na fila
-    # tempoMedioEspera = totalTempoEspera / totalClientesAtendidos if totalClientesAtendidos > 0 else 0
-
-    # # Escrever relatório:
-    # relatorio = f"Total de Clientes Atendidos: {totalClientesAtendidos}\n"
-    # relatorio += f"Total de Operações Realizadas: {totalOperacoesRealizadas}\n"
-    # relatorio += f"Total de Saques Realizadas: {totalSaquesRealizados}\n"
-    # relatorio += f"Total de Depositos Realizadas: {totalDepositosRealizados}\n"
-    # relatorio += f"Total de Pagamentos Realizadas: {totalPagamentosRealizados}\n"
-    # relatorio += f"Tempo Extra de Simulação: {tempoExtra:.2f} minutos\n"
-    # relatorio += f"Tempo Médio de Espera na Fila: {tempoMedioEspera:.2f} minutos\n"
+     # Escrever relatório:
+    relatorio = f"Total de Clientes Atendidos: {totalClientesAtendidos}\n"
+    relatorio += f"Total de Saques Realizadas: {totalSaquesRealizados}\n"
+    relatorio += f"Total de Depositos Realizadas: {totalDepositosRealizados}\n"
+    relatorio += f"Total de Pagamentos Realizadas: {totalPagamentosRealizados}\n"
+    relatorio += f"Tempo Extra de Simulação: {tempoExtra:.2f} minutos\n"
+    relatorio += f"Tempo Médio de Espera na Fila: {mediaEspera:.2f} minutos\n"
 
 
-    # with open("Relatorio.md", "w", encoding="utf-8") as file:
-    #     file.write(relatorio)
+    with open("Relatorio.md", "w", encoding="utf-8") as file:
+        file.write(relatorio)
 
 if __name__ == "__main__":
     main()
