@@ -7,7 +7,7 @@ from Guiche import Guiche
 
 def main():
     expedientTotalTime = 6  # 6 hours
-    realTimeElapsed = 7 # 2 minutes
+    realTimeElapsed = 21600 # 2 minutes
     simulationTime = 1
     beginningTime = 10  # opens at 10 am
     equivalentToOneHour = int(realTimeElapsed / expedientTotalTime)
@@ -33,10 +33,10 @@ def main():
     tempoTotalTodosCaixas = 0
 
     # Expediente:
-    print("{}:00 Horas".format(beginningTime))
+    #print("{}:00 Horas".format(beginningTime))
     while simulationTime <= realTimeElapsed or filaDeClientes.lgt > 0 or tempoTotalTodosCaixas > 0:
         # Diz o tempo de simulação
-        print("Tempo de simulação: {}".format(simulationTime))
+        #print("Tempo de simulação: {}".format(simulationTime))
         if ((simulationTime == 20
              or simulationTime == 40
              or simulationTime == 60
@@ -44,7 +44,7 @@ def main():
              or simulationTime == 100
              or simulationTime == 120) and simulationTime % equivalentToOneHour == 0):
             beginningTime += 1  # add + 1 hour
-            print("{}:00 Horas".format(beginningTime))
+            #print("{}:00 Horas".format(beginningTime))
 
         # Cliente chega:
         if chegouCliente() == 0 and simulationTime < realTimeElapsed:
@@ -53,23 +53,23 @@ def main():
             cliente = filaDeClientes.getFirstNode()
             
             # Mostra a situação da fila:
-            print("Fila:")
-            print("----------------------------")
+            #print("Fila:")
+            #print("----------------------------")
             while cliente != None:
-                print("Cliente: {}".format(cliente.getData()))
+                #print("Cliente: {}".format(cliente.getData()))
                 cliente = cliente.getNextNode()
-            print("----------------------------")
-        print("Comprimento da fila: {}".format(filaDeClientes.lgt))
+            #print("----------------------------")
+        #print("Comprimento da fila: {}".format(filaDeClientes.lgt))
 
 
         # printa a situacao dos guiches
         guiche = guiches.getFirstNode()
         while guiche != None:
-            print("Guichê Ocupação: {}".format(guiche.getData().getTempoTransacao()))
+            #print("Guichê Ocupação: {}".format(guiche.getData().getTempoTransacao()))
             guiche = guiche.getNextNode()
 
         # Verifica se há guichê vazio
-        print("\n")
+        #print("\n")
         guiche = guiches.getFirstNode()
         while guiche != None:
             if guiche.getData().getTempoTransacao() == 0 and filaDeClientes.lgt > 0:  # se for false guiche livre
@@ -78,22 +78,22 @@ def main():
                 transacao = transacaoEscolhida()
 
                 if transacao == 0:
-                    tempoTransacao = 3
+                    tempoTransacao = 30
                     totalSaquesRealizados += 1
 
                 if transacao == 1:
-                    tempoTransacao = 6 
+                    tempoTransacao = 60
                     totalDepositosRealizados += 1
                 
                 if transacao == 2:
-                    tempoTransacao = 9
+                    tempoTransacao = 90
                     totalPagamentosRealizados += 1
                 
                 guiche.getData().setTempoTransacao(tempoTransacao)  # set ocupação true
                 
                 
                 # Remove primeira posição da fila
-                print("Cliente Atendido: {}".format(filaDeClientes.getFirstNode().getData()))
+                #print("Cliente Atendido: {}".format(filaDeClientes.getFirstNode().getData()))
                 totalTempoEspera += filaDeClientes.getFirstNode().getTempoEsperaFila()
                 filaDeClientes.popBegin()
 
@@ -102,7 +102,7 @@ def main():
             guiche = guiche.getNextNode()
 
 
-        print("\n")
+        #print("\n")
         if (filaDeClientes.lgt > 0):
             cliente = filaDeClientes.getFirstNode();
             while cliente != None:
@@ -120,15 +120,14 @@ def main():
             guiche = guiche.getNextNode()
         tempoTotalTodosCaixas = aux
 
-        time.sleep(2)
         simulationTime += 1
 
-    print("Teste total tempo da fila {}".format(totalTempoEspera));
+    #print("Teste total tempo da fila {}".format(totalTempoEspera));
 
 
     # # Calcula o tempo extra de simulação até que todos os guichês estejam desocupados
     tempoExtra = simulationTime - realTimeElapsed
-    mediaEspera = totalClientesAtendidos / totalTempoEspera
+    mediaEspera = totalClientesAtendidos / totalTempoEspera * 60
     
 
      # Escrever relatório:
