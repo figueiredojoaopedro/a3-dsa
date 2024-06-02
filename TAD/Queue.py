@@ -1,4 +1,4 @@
-from Node import Node;
+from TAD.Node import Node;
 
 class Queue:
     def __init__(self):

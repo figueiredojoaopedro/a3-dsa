@@ -1,6 +1,5 @@
 import random;
 
 def chegouCliente():
-    chegouCliente = random.randint(0, 2);
-
-    return 0;
+    chegouCliente = random.randint(0, 29);
+    return chegouCliente;

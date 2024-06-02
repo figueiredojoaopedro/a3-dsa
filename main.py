@@ -1,146 +1,92 @@
-import time
-from functions.transacaoEscolhida import transacaoEscolhida
-from functions.chegouCliente import chegouCliente
-from Queue import Queue
-from Guiche import Guiche
+from functions.defineTempoReal import defineTempoReal;
+from functions.simulaClienteChegando import simulaClienteChegando;
+from functions.mostraSituacaoGuiches import mostraSituacaoGuiches;
+from functions.simulaEntradaGuiche import simulaEntradaGuiche;
+from functions.atualizaTempoEsperaNaFila import atualizaTempoEsperaNaFila;
+from functions.decresceTempoDeOcupacao import decresceTempoDeOcupacao;
+from functions.criaStringRelatorio import criaStringRelatorio;
+from functions.gravarRelatorio import gravarRelatorio;
+from TAD.Queue import Queue
+from classes.Guiche import Guiche
 
 
 def main():
-    expedientTotalTime = 6  # 6 hours
-    realTimeElapsed = 21600 # 2 minutes
-    simulationTime = 1
-    beginningTime = 10  # opens at 10 am
-    equivalentToOneHour = int(realTimeElapsed / expedientTotalTime)
+    realTimeElapsed = 21600; # 6 hours in seconds 21600
+    simulationTime = 1;
 
-    guiches = Queue()
+    guiches = Queue();
     # criação de 3 Guiches
-    guiches.push(Guiche())
-    guiches.push(Guiche())
-    guiches.push(Guiche())
+    guiches.push(Guiche());
+    guiches.push(Guiche());
+    guiches.push(Guiche());
 
     # cria a fila de clientes
-    filaDeClientes = Queue()
+    filaDeClientes = Queue();
 
-    totalClientesAtendidos = 0 # 
+    totalClientesAtendidos = 0; # 
 
-    totalSaquesRealizados = 0 # 
-    totalDepositosRealizados = 0 # 
-    totalPagamentosRealizados = 0 # 
+    totalSaquesRealizados = 0; # 
+    totalDepositosRealizados = 0; # 
+    totalPagamentosRealizados = 0; # 
     
 
-    totalTempoEspera = 0  # Para calcular o tempo médio de espera
+    totalTempoEspera = 0; # Para calcular o tempo médio de espera
 
-    tempoTotalTodosCaixas = 0
+    tempoTotalTodosCaixas = 0; # para saber quanto tempo falta nas operacoes
 
     # Expediente:
-    #print("{}:00 Horas".format(beginningTime))
     while simulationTime <= realTimeElapsed or filaDeClientes.lgt > 0 or tempoTotalTodosCaixas > 0:
         # Diz o tempo de simulação
-        #print("Tempo de simulação: {}".format(simulationTime))
-        if ((simulationTime == 20
-             or simulationTime == 40
-             or simulationTime == 60
-             or simulationTime == 80
-             or simulationTime == 100
-             or simulationTime == 120) and simulationTime % equivalentToOneHour == 0):
-            beginningTime += 1  # add + 1 hour
-            #print("{}:00 Horas".format(beginningTime))
+        print("Tempo de simulação: {}".format(simulationTime));
 
         # Cliente chega:
-        if chegouCliente() == 0 and simulationTime < realTimeElapsed:
-            # Cliente entra na fila
-            filaDeClientes.pushEnd(simulationTime)
-            cliente = filaDeClientes.getFirstNode()
-            
-            # Mostra a situação da fila:
-            #print("Fila:")
-            #print("----------------------------")
-            while cliente != None:
-                #print("Cliente: {}".format(cliente.getData()))
-                cliente = cliente.getNextNode()
-            #print("----------------------------")
-        #print("Comprimento da fila: {}".format(filaDeClientes.lgt))
-
+        filaDeClientes = simulaClienteChegando(filaDeClientes, simulationTime, realTimeElapsed);
+        print("Comprimento da fila: {}".format(filaDeClientes.lgt));
 
         # printa a situacao dos guiches
-        guiche = guiches.getFirstNode()
-        while guiche != None:
-            #print("Guichê Ocupação: {}".format(guiche.getData().getTempoTransacao()))
-            guiche = guiche.getNextNode()
+        mostraSituacaoGuiches(guiches);
 
         # Verifica se há guichê vazio
-        #print("\n")
-        guiche = guiches.getFirstNode()
-        while guiche != None:
-            if guiche.getData().getTempoTransacao() == 0 and filaDeClientes.lgt > 0:  # se for false guiche livre
-                # Atualizar contagem de operações
-                tempoTransacao = 0
-                transacao = transacaoEscolhida()
-
-                if transacao == 0:
-                    tempoTransacao = 30
-                    totalSaquesRealizados += 1
-
-                if transacao == 1:
-                    tempoTransacao = 60
-                    totalDepositosRealizados += 1
-                
-                if transacao == 2:
-                    tempoTransacao = 90
-                    totalPagamentosRealizados += 1
-                
-                guiche.getData().setTempoTransacao(tempoTransacao)  # set ocupação true
-                
-                
-                # Remove primeira posição da fila
-                #print("Cliente Atendido: {}".format(filaDeClientes.getFirstNode().getData()))
-                totalTempoEspera += filaDeClientes.getFirstNode().getTempoEsperaFila()
-                filaDeClientes.popBegin()
-
-                totalClientesAtendidos += 1
-
-            guiche = guiche.getNextNode()
-
-
-        #print("\n")
-        if (filaDeClientes.lgt > 0):
-            cliente = filaDeClientes.getFirstNode();
-            while cliente != None:
-                cliente.setTempoEsperaFila(cliente.getTempoEsperaFila() + 1)
-                cliente = cliente.getNextNode()
+        (guiches, 
+        filaDeClientes, 
+        totalSaquesRealizados, 
+        totalDepositosRealizados, 
+        totalPagamentosRealizados, 
+        totalTempoEspera, 
+        totalClientesAtendidos) = simulaEntradaGuiche(
+            guiches, 
+            filaDeClientes, 
+            totalSaquesRealizados, 
+            totalDepositosRealizados, 
+            totalPagamentosRealizados, 
+            totalTempoEspera, 
+            totalClientesAtendidos
+        )
+ 
+        # atualiza o tempo de espera de todo mundo na fila
+        filaDeClientes = atualizaTempoEsperaNaFila(filaDeClientes);
 
         # Decresce 1 segundo do tempo de ocupação dos guichês:
-        guiche = guiches.getFirstNode()
-        aux = 0
-        while guiche != None:
-            aux += guiche.getData().getTempoTransacao()
-            if guiche.getData().getTempoTransacao() > 0:
-                guiche.getData().setTempoTransacao(guiche.getData().getTempoTransacao() - 1)
-
-            guiche = guiche.getNextNode()
-        tempoTotalTodosCaixas = aux
+        guiches, tempoTotalTodosCaixas = decresceTempoDeOcupacao(guiches, tempoTotalTodosCaixas);
 
         simulationTime += 1
 
-    #print("Teste total tempo da fila {}".format(totalTempoEspera));
+    totalTempoEsperaMins = totalTempoEspera / 60;
+    print("Total tempo da fila {:.2f} mins".format(totalTempoEsperaMins));
 
+    # Calcula o tempo extra de simulação até que todos os guichês estejam desocupados
+    tempoExtra = (simulationTime - realTimeElapsed) / 60;
+    print("Tempo do trabalho extra: {:.2f} minuto(s)".format(tempoExtra));
 
-    # # Calcula o tempo extra de simulação até que todos os guichês estejam desocupados
-    tempoExtra = simulationTime - realTimeElapsed
-    mediaEspera = totalClientesAtendidos / totalTempoEspera * 60
-    
+    # Calcula o tempo médio de espera de cada cliente
+    mediaEspera = totalClientesAtendidos / totalTempoEsperaMins;
 
-     # Escrever relatório:
-    relatorio = f"Total de Clientes Atendidos: {totalClientesAtendidos}\n"
-    relatorio += f"Total de Saques Realizadas: {totalSaquesRealizados}\n"
-    relatorio += f"Total de Depositos Realizadas: {totalDepositosRealizados}\n"
-    relatorio += f"Total de Pagamentos Realizadas: {totalPagamentosRealizados}\n"
-    relatorio += f"Tempo Extra de Simulação: {tempoExtra:.2f} minutos\n"
-    relatorio += f"Tempo Médio de Espera na Fila: {mediaEspera:.2f} minutos\n"
+    # Escrever relatório:
+    relatorio = criaStringRelatorio(totalClientesAtendidos, totalSaquesRealizados, totalDepositosRealizados, totalPagamentosRealizados, tempoExtra, mediaEspera);
 
+    # Escreve o arquivo no mesmo diretorio
+    gravarRelatorio(relatorio);
 
-    with open("Relatorio.md", "w", encoding="utf-8") as file:
-        file.write(relatorio)
 
 if __name__ == "__main__":
     main()

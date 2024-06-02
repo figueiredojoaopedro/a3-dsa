@@ -1,7 +1,6 @@
 class Node:
     def __init__(self, value):
         self.data = value;
-        self.tempoEsperaFila = 0;
         self.prevNode = self.nextNode = None;
 
     def getData(self):
@@ -9,12 +8,6 @@ class Node:
 
     def setData(self, data):
         self.data = data;
-    
-    def setTempoEsperaFila(self, tempo):
-        self.tempoEsperaFila = tempo;
-    
-    def getTempoEsperaFila(self):
-        return self.tempoEsperaFila;
 
     def display(self):
         print("Data: " + self.data);
