@@ -79,7 +79,7 @@ def main():
     print("Tempo do trabalho extra: {:.2f} minuto(s)".format(tempoExtra));
 
     # Calcula o tempo médio de espera de cada cliente
-    mediaEspera = totalClientesAtendidos / totalTempoEsperaMins;
+    mediaEspera = totalTempoEsperaMins / totalClientesAtendidos;
 
     # Escrever relatório:
     relatorio = criaStringRelatorio(totalClientesAtendidos, totalSaquesRealizados, totalDepositosRealizados, totalPagamentosRealizados, tempoExtra, mediaEspera);
