@@ -12,15 +12,15 @@ def simulaEntradaGuiche(guiches, filaDeClientes, totalSaquesRealizados, totalDep
             transacao = transacaoEscolhida();
             
             if transacao == 0:
-                tempoTransacao = 30;
+                tempoTransacao = 60;
                 totalSaquesRealizados += 1;
 
             if transacao == 1:
-                tempoTransacao = 60;
+                tempoTransacao = 90;
                 totalDepositosRealizados += 1;
             
             if transacao == 2:
-                tempoTransacao = 90;
+                tempoTransacao = 120;
                 totalPagamentosRealizados += 1;
             
             guiche.getData().setTempoTransacao(tempoTransacao);  # set ocupação true
